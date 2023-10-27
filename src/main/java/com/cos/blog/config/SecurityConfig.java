@@ -24,20 +24,21 @@ import jakarta.servlet.DispatcherType;
 @EnableMethodSecurity
 public class SecurityConfig {
 	
-	@Autowired
-	private PrincipalDetailService principalDetailService;
+	// 아래 [1], [2]번 Principal 메서드가 없어도 스프링이 처리해주는 듯??
+	// [1] @Autowired
+	// 		  private PrincipalDetailService principalDetailService;
+	
+	// [2]  시큐리티가 대신 로그인해주면서 password를 가로채기하는데
+	// 		해당 password가 뭘로 해시되어 회원가입이 되었는지 알아야 
+	//			같은 해시로 암호화해서 DB에 있는 해시랑 비교할 수 있음
+	// 		public void 
+	// 		authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
+	//			auth.userDetailsService(principalDetailService).passwordEncoder(encode());
+	// 		}
 	
 	@Bean
 	BCryptPasswordEncoder encode() {
 		return new BCryptPasswordEncoder();
-	}
-	
-	// 시큐리티가 대신 로그인해주면서 password를 가로채기하는데
-	// 해당 password가 뭘로 해시되어 회원가입이 되었는지 알아야 
-	// 같은 해시로 암호화해서 DB에 있는 해시랑 비교할 수 있음
-	public void 
-	authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(principalDetailService).passwordEncoder(encode());
 	}
 	
 	@Bean
