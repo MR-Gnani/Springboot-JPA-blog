@@ -53,7 +53,8 @@ public class SecurityConfig {
                         										new AntPathRequestMatcher("/auth/**"), 
                         										new AntPathRequestMatcher("/js/**"),
                         										new AntPathRequestMatcher("/css/**"),
-                        										new AntPathRequestMatcher("/image/**"))
+                        										new AntPathRequestMatcher("/image/**"),
+                        										new AntPathRequestMatcher("/dummy/**"))
                         		.permitAll() // new AntPath 없으면 부트 작동 안됨
                                 .anyRequest().authenticated()
                                 )
