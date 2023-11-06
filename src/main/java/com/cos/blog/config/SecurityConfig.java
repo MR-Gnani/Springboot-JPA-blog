@@ -3,12 +3,13 @@ package com.cos.blog.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -24,17 +25,32 @@ import jakarta.servlet.DispatcherType;
 @EnableMethodSecurity
 public class SecurityConfig {
 	
-	// 아래 [1], [2]번 Principal 메서드가 없어도 스프링이 처리해주는 듯??
-	// [1] @Autowired
-	// 		  private PrincipalDetailService principalDetailService;
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 	
-	// [2]  시큐리티가 대신 로그인해주면서 password를 가로채기하는데
+	
+	// @Bean
+	//   public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+	 //      AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+	  //     return authenticationManagerBuilder.build();
+	 //   }
+	
+	// 아래 [1], [2]번 Principal 메서드가 없어도 스프링이 처리해주는 듯??
+	// [1]
+	//@Autowired 
+	//private PrincipalDetailService principalDetailService;
+	
+	// 시큐리티가 대신 로그인해주면서 password를 가로채기하는데
 	// 		해당 password가 뭘로 해시되어 회원가입이 되었는지 알아야 
 	//			같은 해시로 암호화해서 DB에 있는 해시랑 비교할 수 있음
-	// 		public void 
-	// 		authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
-	//			auth.userDetailsService(principalDetailService).passwordEncoder(encode());
-	// 		}
+	// [2]
+	
+	//public void 
+	//authenticationManager(AuthenticationManagerBuilder auth) throws Exception {
+	//auth.userDetailsService(principalDetailService).passwordEncoder(encode());
+	//}
 	
 	@Bean
 	BCryptPasswordEncoder encode() {

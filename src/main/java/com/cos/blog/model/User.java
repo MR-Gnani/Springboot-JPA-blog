@@ -30,19 +30,21 @@ public class User {
 	private int id; //시퀀스, auto_increment
 	
 		
-	@Column(nullable = false, length=30, unique = true)
+	@Column(nullable = false, length=100, unique = true)
 	private String username; // id
 	
 	@Column(nullable = false, length=100) // 해쉬로 비밀번호 암호화
 	private String password;
 	
-	@Column(nullable = false, length=50)
+	@Column(nullable = true, length=50)
 	private String email;
 	
 	// @ColumnDefault("user")
 	// DB는 Role Type이라는게 없다. --> Enumerated 사용
 	@Enumerated(EnumType.STRING)
 	private RoleType role; // Enum을 쓰는게 좋다. // ADMIN, USER
+	
+	private String oauth; // kakao, google 등
 	
 	@CreationTimestamp // 시간이 자동으로 입력
 	private Timestamp createDate;
