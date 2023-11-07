@@ -1,6 +1,5 @@
 package com.cos.blog.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,15 +11,15 @@ import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.repository.ReplyRepository;
 
+import lombok.RequiredArgsConstructor;
+
 // 스프링이 컴포넌트 스캔을 통해서 Bean에 등록을 해줌. (IOC를 해준다.)
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
-	@Autowired
-	private BoardRepository boardRepository;
-	
-	@Autowired
-	private ReplyRepository replyRepository;
+	private final BoardRepository boardRepository;
+	private final ReplyRepository replyRepository;
 	
 	@Transactional
 	public void 글쓰기(Board board, User user) { // title, content
@@ -64,5 +63,9 @@ public class BoardService {
 		System.out.println("BoardService : " + result);
 	}
 	
-	
+	@Transactional
+	public void 댓글삭제(int replyId) {
+		replyRepository.deleteById(replyId);
+	}
+		
 }
