@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,7 +49,9 @@ public class Board {
 									// JPA(ORM)을 사용하면 오브젝트 저장이 가능해진다.
 	
 	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER) // mappedBy 연관관계의 주인이 아니다.(FK가 아니다.) DB에 컬럼을 만들지 마라.
-	private List<Reply> reply;
+	@JsonIgnoreProperties({"board"}) // 무한참조 방지
+	@OrderBy("id desc")
+	private List<Reply> replys;
 	
 	@CreationTimestamp
 	private Timestamp createDate;

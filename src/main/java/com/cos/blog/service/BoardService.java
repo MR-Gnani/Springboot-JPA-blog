@@ -5,9 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.model.Board;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
+import com.cos.blog.repository.ReplyRepository;
 
 // 스프링이 컴포넌트 스캔을 통해서 Bean에 등록을 해줌. (IOC를 해준다.)
 @Service
@@ -15,6 +18,9 @@ public class BoardService {
 
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	@Autowired
+	private ReplyRepository replyRepository;
 	
 	@Transactional
 	public void 글쓰기(Board board, User user) { // title, content
@@ -51,5 +57,12 @@ public class BoardService {
 		board.setContent(requestBoard.getContent());
 		// 해당함수 종료시(Service가 종료될 때) 트랜잭션이 종료된다. -> 이 때 더티체킹 - 자동 업데이트 (db flush)
 	}
+	
+	@Transactional
+	public void 댓글쓰기(ReplySaveRequestDto replySaveRequestDto) {
+		int result = replyRepository.mSave(replySaveRequestDto.getUserId(), replySaveRequestDto.getBoardId(), replySaveRequestDto.getContent());
+		System.out.println("BoardService : " + result);
+	}
+	
 	
 }
